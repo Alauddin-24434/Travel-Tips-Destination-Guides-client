@@ -1,11 +1,12 @@
-import "@/src/styles/globals.css";
+
 import { Metadata, Viewport } from "next";
-
-import clsx from "clsx";
-
-import { Providers } from "./providers";
+import ReduxProvider from "./ReduxProvider";
+import { NextUIProvider } from "@nextui-org/react";
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
+import clsx from "clsx";
+import "./globals.css";
+
 
 
 export const metadata: Metadata = {
@@ -25,24 +26,26 @@ export const viewport: Viewport = {
     { media: "(prefers-color-scheme: dark)", color: "black" },
   ],
 };
-
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
-    <html suppressHydrationWarning lang="en">
-      <head />
+    <html lang="en">
       <body
-        className={clsx(
+         className={clsx(
           "min-h-screen bg-background font-sans antialiased",
           fontSans.variable
         )}
       >
-        <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+        <ReduxProvider>
+          <NextUIProvider>
           {children}
-        </Providers>
+          </NextUIProvider>
+     
+        </ReduxProvider>
+       
       </body>
     </html>
   );

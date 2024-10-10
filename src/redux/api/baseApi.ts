@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
     BaseQueryApi,
     BaseQueryFn,
@@ -18,7 +19,7 @@ import { logout, setUser } from "../features/auth/authSlice";
    * - `prepareHeaders`: A function to set the authorization header if a token exists.
    */
   const baseQuery = fetchBaseQuery({
-    baseUrl: "https://car-wash-booking-system-liard.vercel.app/api", // Base API URL
+    baseUrl: "http://localhost:5000/api", // Base API URL
     credentials: "include", // Include cookies in requests
     prepareHeaders: (headers, { getState }) => {
       // Retrieve the token from the Redux state
@@ -63,7 +64,7 @@ import { logout, setUser } from "../features/auth/authSlice";
   
       // Handle 401 error
       if (result.error.status === 401) {
-        const res = await fetch("https://car-wash-booking-system-liard.vercel.app/api/auth/refresh-token", {
+        const res = await fetch("http://localhost:5000/api/auth/refresh-token", {
           method: "POST",
           credentials: "include",
         });
@@ -102,6 +103,6 @@ import { logout, setUser } from "../features/auth/authSlice";
   export const baseApi = createApi({
     reducerPath: "baseApi", // Unique key for the API slice
     baseQuery: baseQueryWithRefreshToken, // Use the custom base query
-    tagTypes: ["Auth", "Service", "Slot","Booking","Payment","Review"], // Define tag types for caching
+    tagTypes: ["Auth", "Posts"], // Define tag types for caching
     endpoints: () => ({}), // No endpoints defined here; extend this in other files
   });
