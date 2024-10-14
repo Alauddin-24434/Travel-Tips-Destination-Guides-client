@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { BaseQueryApi } from "@reduxjs/toolkit/query";
 import { SVGProps } from "react";
 
 export type IconSvgProps = SVGProps<SVGSVGElement> & {
@@ -10,10 +11,13 @@ export interface IInput {
   size?: "sm" | "md" | "lg";
   required?: boolean;
   type?: string;
+  placeholder?: string;
   label: string;
   name: string;
-  defaultValue?: string;
+  isRequired?: boolean;
   disabled?: boolean;
+  isReadOnly?: boolean;
+  isDisabled?: boolean;
 }
 
 export type TError = {
@@ -24,100 +28,34 @@ export type TError = {
   };
   status: number;
 };
-export interface Post {
-  id: number;
-  title: string;
-  content: string;
-  category: string;
-}
-
-
 
 export type TResponse<T> = {
-  data: {
-    accessToken: any;
-    data: any;
-    result?: T;
-    success: boolean;
-    message: string;
-  };
+  data?: T;
   error?: TError;
+  success: boolean;
+  message: string;
 };
 
-export interface IComment {
-  _id: string;
-  postId: string;
-  userId: IAuthor;
-  commentText: string;
-  upvotes: number;
-  downvotes: number;
-  createdAt: string;
-  updatedAt: string;
-}
+export type TResponseRedux<T> = TResponse<T> & BaseQueryApi;
 
-export interface ISocialMediaLinks {
-  facebook?: string;
-  twitter?: string;
-  instagram?: string;
-  linkedin?: string;
-}
-
-export interface IAuthor {
-  post: string;
-  socialMediaLinks: ISocialMediaLinks;
+export type TUser = {
   _id: string;
+  name: string;
   email: string;
-  username: string;
-  profilePicture?: string;
+  password: string;
+  gender: string;
   role: string;
-  bio: string;
-  gardeningExperienceLevel: [];
-  followers: string[];
-  following: string[];
-  favourite: IPost[];
+  profileImage: string;
+  bio: any;
+  birthDate: string;
+  status: string;
+  mobileNumber: string;
+  address: any;
   isVerified: boolean;
-  verificationBadge?: string | null;
-  gender: string;
-  interests: string;
-  location: string;
-  status: "Active" | "Blocked";
-  phone: string;
-  dateOfBirth: string;
+  followers: any[];
+  following: any[];
+  bookmarkPosts: any[];
   createdAt: string;
   updatedAt: string;
-}
-
-export interface IPost {
-  _id: string;
-  title: string;
-  bio: string;
-  content: string;
-  author: IAuthor;
-  comments: IComment[];
-  tags: string[];
-  category: string;
-  upvotes: number;
-  downvotes: number;
-  commentsCount: number;
-  isPremium: boolean;
-  images: string[];
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface editUserData {
-  _id: string | undefined;
-  username: string;
-  bio: string;
-  gardeningExperienceLevel: string;
-  location: string;
-  phone: string;
-  dateOfBirth: Date | undefined | string | null;
-  gender: string;
-  facebook?: string;
-  twitter?: string;
-  interest: string;
-  instagram?: string;
-  linkedin?: string;
-  profilePicture?: string;
-}
+  __v: number;
+};

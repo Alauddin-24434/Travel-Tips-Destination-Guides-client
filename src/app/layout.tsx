@@ -1,13 +1,13 @@
-
+import "../styles/globals.css";
 import { Metadata, Viewport } from "next";
-import ReduxProvider from "./ReduxProvider";
-import { NextUIProvider } from "@nextui-org/react";
-import { siteConfig } from "@/config/site";
-import { fontSans } from "@/config/fonts";
 import clsx from "clsx";
-import "./globals.css";
+import { Toaster } from "sonner";
 
+import { siteConfig } from "../config/site";
+import { fontSans } from "../config/fonts";
+import ReduxProviders from "../lib/ReduxProviders";
 
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: {
@@ -26,27 +26,29 @@ export const viewport: Viewport = {
     { media: "(prefers-color-scheme: dark)", color: "black" },
   ],
 };
+
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body
-         className={clsx(
-          "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable
-        )}
-      >
-        <ReduxProvider>
-          <NextUIProvider>
-          {children}
-          </NextUIProvider>
-     
-        </ReduxProvider>
-       
-      </body>
-    </html>
+    <ReduxProviders>
+      <html suppressHydrationWarning lang="en">
+        <head />
+        <body
+          className={clsx(
+            "min-h-screen bg-background font-sans antialiased",
+            fontSans.variable
+          )}
+        >
+          {/* Ensure children prop is passed to Providers */}
+          <Providers>
+            {children}
+          </Providers>
+          <Toaster richColors expand={false} position="top-center" />
+        </body>
+      </html>
+    </ReduxProviders>
   );
 }

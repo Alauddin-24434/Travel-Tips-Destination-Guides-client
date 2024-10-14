@@ -1,38 +1,26 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Travel Tripes",
+  name: "Next.js + NextUI",
   description: "Make beautiful websites regardless of your design experience.",
   navItems: [
     {
-      label: "Home",
+      label: "News Feed",
       href: "/",
     },
     {
-      label: "News feed",
-      href: "/newsfeed",
-    },
-    {
       label: "About Us",
-      href: "/about",
+      href: "/about-us",
     },
     {
       label: "Contact Us",
-      href: "/contact",
-    },
-    {
-      label: "Image Gallery",
-      href: "/imagegallery",
+      href: "/contactUs",
     },
   ],
   navMenuItems: [
     {
-      label: "Home",
+      label: "News Feed",
       href: "/",
-    },
-    {
-      label: "News feed",
-      href: "/news-feed",
     },
     {
       label: "About Us",
@@ -41,14 +29,6 @@ export const siteConfig = {
     {
       label: "Contact Us",
       href: "/contact-us",
-    },
-    {
-      label: "Image Gallery",
-      href: "/image-gallery",
-    },
-    {
-      label: "Login",
-      href: "/login",
     },
   ],
 };
