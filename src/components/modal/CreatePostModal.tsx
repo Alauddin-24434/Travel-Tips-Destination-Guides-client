@@ -132,50 +132,48 @@ const CreatePostModal = ({ isOpen, onClose }: IProps) => {
   const [addPost, { isLoading: handleAddPostLoading, error: postError }] =
     useAddPostMutation();
 
-    const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-      // Check if there are no images uploaded
-      if (imageFiles.length === 0) {
-        return toast.error("Please Upload Thumbnail at last one image", {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    // Check if there are no images uploaded
+    if (imageFiles.length === 0) {
+      return setError("Please Upload Thumbnail at last one image");
+    }
+
+    // Upload images first, get the URLs
+    const uploadedImagesUrls = await Promise.all(
+      imageFiles.map((file) => uploadImageToCloud(file))
+    );
+
+    const postData = {
+      ...data,
+      content: value,
+      author: currentUserData?.data?._id,
+      isPremium: isPremiumContent,
+      images: uploadedImagesUrls, // only send the URLs, not the File objects
+    };
+
+    try {
+      const res = (await addPost(postData)) as TResponse<IPost>;
+
+      if (res.error) {
+        toast.error(res.error.data.message, {
+          duration: 2000,
+        });
+      } else {
+        toast.success("Post created successfully", {
           duration: 2000,
         });
       }
-    
-      // Upload images first, get the URLs
-      const uploadedImagesUrls = await Promise.all(
-        imageFiles.map((file) => uploadImageToCloud(file))
-      );
-    
-      const postData = {
-        ...data,
-        content: value,
-        author: currentUserData?.data?._id,
-        isPremium: isPremiumContent,
-        images: uploadedImagesUrls, // only send the URLs, not the File objects
-      };
-    
-      try {
-        const res = (await addPost(postData)) as TResponse<IPost>;
-    
-        if (res.error) {
-          toast.error(res.error.data.message, {
-            duration: 2000,
-          });
-        } else {
-          toast.success("Post created successfully", {
-            duration: 2000,
-          });
-        }
-      } catch (error) {
-        toast.error("Something went wrong", { duration: 2000 });
-      } finally {
-        onClose();
-      }
-    };
-    
+    } catch (error) {
+      toast.error("Something went wrong", { duration: 2000 });
+    } finally {
+      onClose();
+    }
+  };
+
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     if (!file) return;
-
+    setError('')
     setLoading(true);
 
     try {
@@ -229,9 +227,11 @@ const CreatePostModal = ({ isOpen, onClose }: IProps) => {
                 <div className="space-y-6">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="sm:col-span-2">
+                    <p className="text-red-500 text-3xl">*</p>
                       <TInput label="Title" name="title" type="text" />
                     </div>
                     <div>
+                    <p className="text-red-500 text-3xl">*</p>
                       <TSelect
                         label="Category"
                         name="category"
@@ -240,10 +240,12 @@ const CreatePostModal = ({ isOpen, onClose }: IProps) => {
                       />
                     </div>
                     <div>
+                    <p className="text-red-500 text-3xl">*</p> 
                       <TInput label="Location" name="location" type="text" />
                     </div>
                     {currentUserData?.data?.isVerified && (
                       <div className="sm:col-span-2 flex items-center">
+                        
                         <Checkbox
                           isSelected={isPremiumContent}
                           radius="full"
@@ -259,17 +261,19 @@ const CreatePostModal = ({ isOpen, onClose }: IProps) => {
                   </div>
 
                   <div>
+                  <p className="text-red-500 text-3xl">*</p>
                     <TTextarea label="Short Description" name="description" />
                   </div>
 
                   <Divider className="my-4" />
 
                   <div>
+                 
                     <label
                       className="block text-sm font-medium text-default-700 mb-2"
                       htmlFor="image"
                     >
-                      Upload Thumbnail
+                        <p className="text-red-500 text-3xl">*</p> Upload Thumbnail
                     </label>
                     <div className="flex items-center justify-center w-full">
                       <label
@@ -320,8 +324,9 @@ const CreatePostModal = ({ isOpen, onClose }: IProps) => {
                   </div>
 
                   <div className="mt-6">
+                
                     <label className="block text-sm font-medium text-default-700 mb-2">
-                      Content
+                    <p className="text-red-500 flex items-center text-3xl">*</p> <span>Content</span>
                     </label>
                     <ReactQuill
                       theme="snow"
