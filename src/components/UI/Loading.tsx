@@ -1,8 +1,8 @@
-import { RotateLoader } from "react-spinners";
+import styles from "./Loder.module.css"
 const Loading = () => {
   return (
     <div className=" h-screen bg-black/10 fixed inset-0 backdrop-blur-md z-[999] flex justify-center items-center">
-      <RotateLoader color="#1877F2" size={20} />
+      <span className={styles.loader}></span>
     </div>
   );
 };

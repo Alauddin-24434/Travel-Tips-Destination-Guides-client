@@ -21,15 +21,15 @@ import Loading from "@/components/ui/Loading";
 
 
 
+
 const columns = [
   { name: "NAME", uid: "name" },
-  { name: "Email", uid: "email" },
   { name: "GENDER", uid: "gender" },
   { name: "ROLE", uid: "role" },
   { name: "FOLLOWERS", uid: "followers" },
   { name: "FOLLOWING", uid: "following" },
-  { name: "STATUS", uid: "status" },
-  { name: "ACTIONS", uid: "actions" },
+  { name: "TOGGLE STATUS", uid: "status" },
+  { name: "DETAILS", uid: "actions" },
 ];
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
@@ -72,19 +72,18 @@ export default function AllUser() {
             <p className="font-medium">{user.name}</p>
           </div>
         );
-      case "email":
-        return <p className="text-sm text-default-600">{user.email}</p>;
+ 
       case "gender":
         return <p className="capitalize text-sm">{user.gender}</p>;
       case "followers":
         return (
-          <p className="text-sm text-center font-semibold">
+          <p className="text-sm font-semibold">
             {user.followers.length}
           </p>
         );
       case "following":
         return (
-          <p className="text-sm text-center font-semibold">
+          <p className="text-sm  font-semibold">
             {user.following.length}
           </p>
         );

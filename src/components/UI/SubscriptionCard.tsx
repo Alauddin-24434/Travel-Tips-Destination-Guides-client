@@ -3,20 +3,18 @@
 import React from "react";
 import { Card, CardBody, CardFooter, CardHeader } from "@nextui-org/card";
 import { Button } from "@nextui-org/button";
-import { Chip } from "@nextui-org/chip";
 import { FaCheck } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useCreatePaymentMutation } from "@/redux/features/payment/paymentApi";
 import { useAppSelector } from "@/redux/hook";
 import { useCurrentUser } from "@/redux/features/auth/authSlice";
 
-
 interface SubscriptionCardProps {
   title: string;
   price: string;
   features: string[];
   expiry: string;
-  recommended?: boolean;
+  isAvailable: boolean; // Corrected typo from isAvailavle
 }
 
 const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
@@ -24,7 +22,7 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
   price,
   features,
   expiry,
-  recommended = false,
+  isAvailable, // Use isAvailable for logic
 }) => {
   const [createPayment] = useCreatePaymentMutation();
   const user = useAppSelector(useCurrentUser);
@@ -50,20 +48,11 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
       className="w-full max-w-xs"
       initial={{ opacity: 0, y: 50 }}
       transition={{ duration: 0.5 }}
-      whileHover={{ scale: 1.05 }}
+      whileHover={isAvailable ? { scale: 1.05 } : {}} // Only scale if available
     >
-      {" "}
-      <Card
-        className={`w-full ${recommended ? "border-primary border-2" : ""}`}
-        shadow="lg"
-      >
+      <Card className="w-full" shadow="lg">
         <CardHeader className="flex flex-col items-center pb-0 pt-2 px-4">
-          <h2 className="text-2xl font-bold text-primary">{title}</h2>
-          {recommended && (
-            <Chip className="mt-2" color="primary" variant="flat">
-              Recommended
-            </Chip>
-          )}
+          <h2 className="text-2xl font-bold text-[#1CD15D]">{title}</h2>
         </CardHeader>
         <CardBody className="overflow-visible py-2">
           <div className="flex justify-center items-baseline my-8">
@@ -79,7 +68,7 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
                 initial={{ opacity: 0, x: -50 }}
                 transition={{ delay: index * 0.1 }}
               >
-                <FaCheck className="text-primary" />
+                <FaCheck className="text-[#1CD15D]" />
                 <span className="break-words"> {feature}</span>
               </motion.li>
             ))}
@@ -87,12 +76,13 @@ const SubscriptionCard: React.FC<SubscriptionCardProps> = ({
         </CardBody>
         <CardFooter className="pt-0">
           <Button
-            className="w-full"
+            className={`w-full ${isAvailable ? 'bg-[#1CD15D]' : 'bg-gray-400 cursor-not-allowed'}`}
             color="primary"
             size="lg"
             onClick={handlePayment}
+            disabled={!isAvailable} // Disable button if not available
           >
-            Subscribe Now
+            {isAvailable ? "Subscribe Now" : "Not Available"}
           </Button>
         </CardFooter>
       </Card>

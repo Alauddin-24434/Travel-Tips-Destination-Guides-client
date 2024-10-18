@@ -1,4 +1,4 @@
-import { IoBookmarkOutline } from "react-icons/io5";
+
 import { Divider } from "@nextui-org/divider";
 import Container from "@/components/ui/Container";
 import MyBookmark from "@/components/modules/bookmark/MyBookmark";
@@ -12,7 +12,7 @@ const MyBookmarkPostPage = () => {
         <div className="mb-8 p-6 border border-default-200 rounded-2xl shadow-sm">
           <div className="flex flex-col sm:flex-row justify-between items-center">
             <div className="flex items-center mb-6 sm:mb-0">
-              <IoBookmarkOutline className="text-primary text-4xl mr-4" />
+              
               <h1 className="text-3xl sm:text-4xl font-bold">
                 Bookmarked Posts
               </h1>

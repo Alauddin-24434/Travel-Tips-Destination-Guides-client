@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-
+import { FaFilePdf } from "react-icons/fa6";
 import { format } from "date-fns";
 import { Card, CardHeader, CardBody, CardFooter } from "@nextui-org/card";
 import { Avatar } from "@nextui-org/avatar";
@@ -43,7 +43,9 @@ import { useDeletePostMutation, useHandleVotingMutation } from "@/redux/features
 import { useGetCurrentUserQuery, useToggleBookMarkPostMutation, useToggleFollowUnfollowUserMutation } from "@/redux/features/auth/authApi";
 import { TResponse } from "@/types";
 
-
+// Import jsPDF
+import jsPDF from "jspdf";
+import Link from "next/link";
 
 interface IProps {
   postData: IPost;
@@ -118,7 +120,6 @@ const PostDetailsCard = ({ postData }: IProps) => {
   };
 
   // delete post rtk query hook function
-
   const [deletePost] = useDeletePostMutation();
 
   const handleDeletePost = async (postId: string) => {
@@ -154,17 +155,75 @@ const PostDetailsCard = ({ postData }: IProps) => {
     (item: { _id: any }) => item._id,
   );
 
+  // Generate PDF
+
+
+
+
+  const generatePDF = () => {
+      const doc = new jsPDF();
+  
+      // Function to add text with pagination
+      const addTextWithPagination = (text:any, x:any, y:any, maxHeight:any) => {
+          const splitText = doc.splitTextToSize(text, 180); // Split text to fit the page width
+          for (let i = 0; i < splitText.length; i++) {
+              if (y + 10 > maxHeight) { // Check if it exceeds page height
+                  doc.addPage(); // Add a new page
+                  y = 10; // Reset Y position to top of the new page
+              }
+              doc.text(splitText[i], x, y);
+              y += 10; // Increment Y position for the next line
+          }
+          return y; // Return the updated Y position
+      };
+  
+      // Add title and author
+      let currentYPosition = 10; // Start Y position
+      addTextWithPagination(postData?.title || "Post Title", 10, currentYPosition, 290);
+      currentYPosition += 10;
+      addTextWithPagination(`Author: ${postData?.author?.name}`, 10, currentYPosition, 290);
+      currentYPosition += 10;
+  
+      // Set the starting position for images
+      const maxHeight = doc.internal.pageSize.height - 10; // Max height for content
+      const imageSpacing = 10; // Space between images
+  
+      // Add images from the images array
+      if (postData?.images && postData.images.length > 0) {
+          postData.images.forEach((imageUrl, index) => {
+              // Check if adding the image exceeds the page height
+              if (currentYPosition + 160 > maxHeight) { // 160 is the height of the image
+                  doc.addPage(); // Add a new page
+                  currentYPosition = 10; // Reset Y position to top of the new page
+              }
+              // Add the image to the PDF
+              doc.addImage(imageUrl, 'PNG', 10, currentYPosition, 180, 160); // Adjust x, y, width, height as needed
+              currentYPosition += 170; // Increment Y position for the next image (160 height + 10 spacing)
+          });
+      }
+  
+      // Add description and content
+      currentYPosition = addTextWithPagination(postData?.description || "Post Description", 10, currentYPosition, maxHeight);
+      // currentYPosition = addTextWithPagination(postData?.content || "Post Content", 10, currentYPosition, maxHeight);
+      addTextWithPagination(`Location: ${postData?.location}`, 10, currentYPosition, maxHeight);
+  
+      // Save the PDF
+      doc.save(`${postData?.title || "post"}.pdf`);
+  };
+  
+  
   return (
     <Card className="w-full">
       <CardHeader className="flex flex-col items-start px-6 pt-6 pb-0">
         <div className="flex justify-between w-full mb-4">
           {/* author details */}
           <div className="flex items-center">
+          <Link className="block mb-2" href={`/profile/${postData?.author?._id}`}>
             <div className="relative">
               <Badge
                 isOneChar
                 className={`${!postData?.author?.isVerified ? "hidden" : ""}`}
-                color="success"
+                color="primary"
                 content={<CheckIcon />}
                 placement="bottom-right"
                 shape="circle"
@@ -177,9 +236,12 @@ const PostDetailsCard = ({ postData }: IProps) => {
                 />
               </Badge>
             </div>
+            </Link>
             <div className="ml-4">
               {" "}
-              <p className="font-semibold text-lg">{postData?.author?.name}</p>
+              <Link className="block mb-2" href={`/profile/${postData?.author?._id}`}>
+              <p className="font-semibold text-lg hover:underline">{postData?.author?.name}</p>
+              </Link>
               <p className="text-sm text-default-500">
                 {format(new Date(postData?.createdAt!), "MMM dd, yyyy")}
               </p>
@@ -188,7 +250,7 @@ const PostDetailsCard = ({ postData }: IProps) => {
               </p>
             </div>
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
             {user?._id !== postData?.author?._id && (
               <Tooltip
                 closeDelay={2000}
@@ -220,6 +282,17 @@ const PostDetailsCard = ({ postData }: IProps) => {
                 </Button>
               </Tooltip>
             )}
+             {/* Button to Download PDF */}
+    <div className="flex">
+          <Button
+            onClick={generatePDF}
+            size="sm"
+            variant="flat"
+            className="text-blue-500 "
+          >
+           <FaFilePdf className="text-xl"/>
+          </Button>
+        </div>
             <Tooltip
               closeDelay={2000}
               color="warning"
@@ -246,6 +319,7 @@ const PostDetailsCard = ({ postData }: IProps) => {
                 )}
               </Button>
             </Tooltip>
+            
             {user?._id === postData?.author?._id && (
               <Dropdown>
                 <DropdownTrigger>
@@ -276,7 +350,7 @@ const PostDetailsCard = ({ postData }: IProps) => {
             <EditPostModal isOpen={isOpen} post={postData} onClose={onClose} />
           </div>
         </div>
-
+   
         {/* post title */}
         <h1 className="text-3xl font-bold mb-2">{postData?.title}</h1>
 
@@ -300,6 +374,8 @@ const PostDetailsCard = ({ postData }: IProps) => {
             </span>
           )}
         </div>
+
+    
       </CardHeader>
 
       <Divider />
@@ -367,7 +443,7 @@ const PostDetailsCard = ({ postData }: IProps) => {
               className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-md shadow hover:bg-blue-600 transition"
               onClick={() =>
                 handleShare(
-                  `http://localhost:3000/post/${postData?._id}`,
+                  `https://travel-trips-client.vercel.app/post/${postData?._id}`,
                 )
               }
             >
@@ -376,6 +452,7 @@ const PostDetailsCard = ({ postData }: IProps) => {
             </button>
           </div>
         </div>
+        
       </CardFooter>
     </Card>
   );

@@ -13,7 +13,7 @@ import { logout, setUser } from '../features/auth/authSlice'
 
 // main base query
 const baseQuery = fetchBaseQuery({
-  baseUrl: 'http://localhost:5001/api',
+  baseUrl: 'https://travel-trips-guide.vercel.app/api',
   credentials: 'include',
   prepareHeaders: (headers, { getState }) => {
     const state = getState() as RootState
@@ -36,7 +36,7 @@ const BaseQueryWithRefreshToken: BaseQueryFn<
 
   if (result?.error?.status === 401) {
     const res = await fetch(
-      'http://localhost:5001/api/auth/refresh-token',
+      'https://travel-trips-guide.vercel.app/api/auth/refresh-token',
       {
         method: 'POST',
         credentials: 'include'

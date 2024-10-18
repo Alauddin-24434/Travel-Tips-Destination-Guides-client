@@ -126,8 +126,8 @@ const Page = () => {
           <div className="relative flex w-full max-w-md flex-col items-center justify-center rounded-lg border px-8 py-6 bg-default-100 border-default-200 transition-transform duration-500 transform opacity-100">
             {/* theme toggle switch */}
          
-            <h3 className="text-3xl font-bold text-blue-600 mb-2">
-              Login to Travex
+            <h3 className="text-3xl font-bold text-green-500 mb-2">
+              Login to Travel
             </h3>
             <p className="text-lg text-gray-600 mb-6">
               Welcome Back! Lets Get Started
@@ -159,7 +159,7 @@ const Page = () => {
 
                 <div>
                   <button
-                    className="text-sm inline-block hover:underline cursor-pointer text-blue-600 font-semibold"
+                    className="text-sm inline-block hover:underline cursor-pointer text-green-500 font-semibold"
                     type="button"
                     onClick={() => setToggleForgetPasswordForm(true)}
                   >
@@ -168,7 +168,7 @@ const Page = () => {
                 </div>
 
                 <Button
-                  className="w-full py-2 mt-4 rounded-lg bg-blue-600 text-white font-semibold transition duration-300 transform hover:scale-105 "
+                  className="w-full py-2 mt-4 rounded-lg bg-green-600 text-white font-semibold transition duration-300 transform hover:scale-105 "
                   size="lg"
                   type="submit"
                 >
@@ -179,8 +179,8 @@ const Page = () => {
               <div className="mt-4 text-center text-gray-500">
                 Don’t have an account?{" "}
                 <Link
-                  className="text-blue-600 transition duration-300 hover:underline hover:text-blue-700"
-                  href={"/register"}
+                  className="text-green-600 transition duration-300 hover:underline hover:text-blue-700"
+                  href={"/signup"}
                 >
                   Register
                 </Link>

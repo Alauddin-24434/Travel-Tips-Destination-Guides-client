@@ -1,34 +1,33 @@
 import Container from "@/components/ui/Container";
 import SubscriptionCard from "@/components/ui/SubscriptionCard";
 
-
 const subscriptionPlans = [
   {
-    title: "Explorer Plan (1 Day)",
-    price: "99",
-    features: [
-      "Access to premium travel guides",
-      "Create and view premium content",
-      "Ad-free experience",
-    ],
-    expiry: "1 Day",
-    recommended: false,
-  },
-  {
     title: "Explorer Plan (7 Days)",
-    price: "299",
+    price: "49",
     features: [
       "Access to premium travel guides",
       "Create and view premium content",
       "Ad-free experience",
-      "Personalized travel recommendations",
     ],
     expiry: "7 Days",
-    recommended: true,
+isAvailable:true
+  },
+  {
+    title: "Explorer Plan (15 Days)",
+    price: "150",
+    features: [
+      "Access to premium travel guides",
+      "Create and view premium content",
+      "Early access to new features",
+      "Personalized travel recommendations",
+    ],
+    expiry: "15 Days",
+    isAvailable:false
   },
   {
     title: "Explorer Plan (1 Month)",
-    price: "499",
+    price: "299",
     features: [
       "All 7 Days Plan features",
       "Exclusive travel webinars",
@@ -36,14 +35,14 @@ const subscriptionPlans = [
       "Discounts on partner hotels",
     ],
     expiry: "1 Month",
-    recommended: false,
+    isAvailable:true
   },
 ];
 
 const SubscriptionPage = () => {
   return (
     <Container>
-      <h1 className="text-4xl md:text-5xl font-bold text-center text-primary mb-4">
+      <h1 className="text-4xl md:text-5xl font-bold text-[#1CD15D] mb-4 text-center">
         Choose Your Travel Adventure
       </h1>
       <p className="text-xl text-center text-default-600 mb-12">
@@ -56,7 +55,7 @@ const SubscriptionPage = () => {
             expiry={plan.expiry}
             features={plan.features}
             price={plan.price}
-            recommended={plan.recommended}
+            isAvailable={plan.isAvailable}
             title={plan.title}
           />
         ))}

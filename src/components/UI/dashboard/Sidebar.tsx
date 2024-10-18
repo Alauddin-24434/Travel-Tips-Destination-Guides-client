@@ -113,8 +113,8 @@ const Sidebar = () => {
           <div className="p-4">
             <div className="flex items-center justify-between">
               <Link className="flex items-center space-x-2" href="/">
-                Travel
-                <span className="text-xl font-semibold">Travex</span>
+                
+                <span className="text-xl font-semibold text-green-600">Travel</span>
               </Link>
               <Button
                 isIconOnly
@@ -152,8 +152,8 @@ const Sidebar = () => {
               <ThemeSwitch />
             </div>
             <Button
-              className="w-full justify-start text-danger"
-              color="danger"
+              className="w-full justify-start bg-red-500 text-[#ffff]"
+             
               startContent={<IoLogOutOutline size={20} />}
               variant="flat"
               onClick={handleLogout}

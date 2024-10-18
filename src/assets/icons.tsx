@@ -221,6 +221,7 @@ export const TravexLogo = (props: React.SVGProps<SVGSVGElement>) => (
     viewBox="0 0 50 50" // Adjusted to fit tightly around the logo
     width="40" // Set a smaller width
     xmlns="http://www.w3.org/2000/svg"
+    
     {...props}
   >
     {/* Circle background for the logo */}
@@ -250,3 +251,4 @@ export const TravexLogo = (props: React.SVGProps<SVGSVGElement>) => (
     <line stroke="white" strokeWidth="1.5" x1="15" x2="35" y1="25" y2="25" />
   </svg>
 );
+

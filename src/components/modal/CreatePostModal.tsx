@@ -132,39 +132,46 @@ const CreatePostModal = ({ isOpen, onClose }: IProps) => {
   const [addPost, { isLoading: handleAddPostLoading, error: postError }] =
     useAddPostMutation();
 
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    // Upload images first, get the URLs
-    const uploadedImagesUrls = await Promise.all(
-      imageFiles.map((file) => uploadImageToCloud(file))
-    );
-
-    const postData = {
-      ...data,
-      content: value,
-      author: currentUserData?.data?._id,
-      isPremium: isPremiumContent,
-      images: uploadedImagesUrls, // only send the URLs, not the File objects
-    };
-
-    try {
-      const res = (await addPost(postData)) as TResponse<IPost>;
-
-      if (res.error) {
-        toast.error(res.error.data.message, {
-          duration: 2000,
-        });
-      } else {
-        toast.success("Post created successfully", {
+    const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+      // Check if there are no images uploaded
+      if (imageFiles.length === 0) {
+        return toast.error("Please Upload Thumbnail at last one image", {
           duration: 2000,
         });
       }
-    } catch (error) {
-      toast.error("Something went wrong", { duration: 2000 });
-    } finally {
-      onClose();
-    }
-  };
-
+    
+      // Upload images first, get the URLs
+      const uploadedImagesUrls = await Promise.all(
+        imageFiles.map((file) => uploadImageToCloud(file))
+      );
+    
+      const postData = {
+        ...data,
+        content: value,
+        author: currentUserData?.data?._id,
+        isPremium: isPremiumContent,
+        images: uploadedImagesUrls, // only send the URLs, not the File objects
+      };
+    
+      try {
+        const res = (await addPost(postData)) as TResponse<IPost>;
+    
+        if (res.error) {
+          toast.error(res.error.data.message, {
+            duration: 2000,
+          });
+        } else {
+          toast.success("Post created successfully", {
+            duration: 2000,
+          });
+        }
+      } catch (error) {
+        toast.error("Something went wrong", { duration: 2000 });
+      } finally {
+        onClose();
+      }
+    };
+    
   const handleImageChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     if (!file) return;

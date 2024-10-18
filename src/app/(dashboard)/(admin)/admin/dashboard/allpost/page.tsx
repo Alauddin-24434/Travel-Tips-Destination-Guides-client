@@ -12,7 +12,7 @@ import {
 import { Avatar } from "@nextui-org/avatar";
 import { useRouter } from "next/navigation";
 import { Button } from "@nextui-org/button";
-import { DeleteIcon, EyeIcon } from "lucide-react";
+import {  EyeIcon } from "lucide-react";
 import { Chip } from "@nextui-org/chip";
 import {
   Modal,
@@ -26,6 +26,7 @@ import { useDeletePostMutation, useGetAllPostQuery } from "@/redux/features/post
 import { IPost } from "@/types/post.type";
 import { TResponse } from "@/types";
 import Loading from "@/components/ui/Loading";
+import { MdDelete } from "react-icons/md";
 
 
 
@@ -146,7 +147,7 @@ export default function ManageAllPostPage() {
               variant="light"
               onClick={() => openDeleteModal(post._id)}
             >
-              <DeleteIcon className="w-4 h-4" />
+              <MdDelete className="w-4 h-4" />
             </Button>
           </div>
         );

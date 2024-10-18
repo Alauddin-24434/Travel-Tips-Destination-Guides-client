@@ -16,13 +16,11 @@ import TForm from "@/components/form/TForm";
 import { changePasswordValidationSchema } from "@/schemas/auth.schema";
 import TPasswordInput from "@/components/form/TPasswordInput";
 
-
 const ChangePasswordPage = () => {
   const [changePassword, { isLoading: changePasswordLoading }] =
     useChangePasswordMutation();
 
   const dispatch = useAppDispatch();
-
   const router = useRouter();
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
@@ -34,16 +32,10 @@ const ChangePasswordPage = () => {
       const res = (await changePassword(passwordData)) as TResponse<any>;
 
       if (res.error) {
-        toast.error(res.error.data.message, {
-          duration: 2000,
-        });
+        toast.error(res.error.data.message, { duration: 2000 });
       } else {
-        toast.success("Password changed successfully", {
-          duration: 2000,
-        });
-
+        toast.success("Password changed successfully", { duration: 2000 });
         dispatch(logout());
-
         router.push("/login");
       }
     } catch (error) {
@@ -53,9 +45,9 @@ const ChangePasswordPage = () => {
 
   return (
     <Container>
-      <div className="w-full max-w-xl mx-auto py-10">
-        <h1 className="text-3xl font-bold mb-4">Change Password</h1>
-        <p className="text-gray-500 mb-6">
+      <div className="w-full max-w-md mx-auto py-10 px-6 bg-white rounded-lg shadow-lg">
+        <h1 className="text-3xl font-bold mb-4 text-center">Change Password</h1>
+        <p className="text-gray-500 mb-6 text-center">
           Please enter your old password and choose a new one.
         </p>
 
@@ -88,7 +80,7 @@ const ChangePasswordPage = () => {
           </div>
 
           <Button
-            className="w-full py-2 mt-4 rounded-lg bg-blue-600 text-white font-semibold transition duration-300 transform hover:scale-105 "
+            className="w-full py-2 mt-4 rounded-lg bg-blue-600 text-white font-semibold transition duration-300 transform hover:bg-blue-700"
             isLoading={changePasswordLoading}
             size="lg"
             spinner={<Spinner color="current" size="sm" />}

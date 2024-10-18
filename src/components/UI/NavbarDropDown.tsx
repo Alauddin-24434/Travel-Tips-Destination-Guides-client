@@ -20,6 +20,7 @@ const NavbarDropdown = () => {
   const dispatch = useAppDispatch();
 
   const { data: userData } = useGetCurrentUserQuery({});
+ 
 
   const [isMounted, setIsMounted] = useState(false);
 
@@ -46,7 +47,7 @@ const NavbarDropdown = () => {
       <Badge
         isOneChar
         className={`${!userData?.data?.isVerified ? "hidden" : ""}`}
-        color="success"
+        color="primary"
         content={<CheckIcon />}
         placement="bottom-right"
         shape="circle"

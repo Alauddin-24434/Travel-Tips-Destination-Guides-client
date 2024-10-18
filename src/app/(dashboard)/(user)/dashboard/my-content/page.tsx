@@ -6,7 +6,7 @@ import Container from "@/components/ui/Container";
 import { Button } from "@nextui-org/button";
 import { Divider } from "@nextui-org/divider";
 import { useDisclosure } from "@nextui-org/modal";
-import { IoAddCircleOutline, IoNewspaperOutline } from "react-icons/io5";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 
 
@@ -19,11 +19,11 @@ const MyPostsPage = () => {
         <div className="mb-8 p-6 border border-default-200 rounded-2xl shadow-sm">
           <div className="flex flex-col sm:flex-row justify-between items-center">
             <div className="flex items-center mb-6 sm:mb-0">
-              <IoNewspaperOutline className="text-primary text-4xl mr-4" />
-              <h1 className="text-3xl sm:text-4xl font-bold">Manage Content</h1>
+              
+              <h1 className="text-3xl sm:text-4xl font-bold">Content Management</h1>
             </div>
             <Button
-              color="primary"
+              color="success"
               size="lg"
               startContent={<IoAddCircleOutline fontSize={"1.5rem"} />}
               variant="shadow"

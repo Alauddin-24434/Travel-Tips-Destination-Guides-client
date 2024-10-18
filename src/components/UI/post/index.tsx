@@ -39,15 +39,33 @@ import { useCurrentUser } from "@/redux/features/auth/authSlice";
 import { useToggleFollowUnfollowUserMutation } from "@/redux/features/auth/authApi";
 import { useDeletePostMutation, useHandleVotingMutation } from "@/redux/features/post/postApi";
 import { TResponse } from "@/types";
+import { useRouter } from "next/navigation";
+
 
 
 export default function PostCard({ post }: { post: IPost }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  const router = useRouter(); 
   // getting current logged in user from redux
   const user = useAppSelector(useCurrentUser);
   const [handleFollow, { isLoading: handleFollowLoading }] =
     useToggleFollowUnfollowUserMutation();
+
+
+  // Function to handle comment button click
+  const handleCommentClick = () => {
+    if (!user) {
+      router.push("/login"); // Redirect to login if user is not logged in
+    } else {
+      router.push(`/post/${post._id}`); // Redirect to post page if user is logged in
+    }
+  };
+
+
+
+
+
+
 
   // handle follow button function
   const handleFollowToggle = async (id: string) => {
@@ -126,17 +144,29 @@ export default function PostCard({ post }: { post: IPost }) {
     }
   };
 
+
+  const handlePostDetails = (id:string) => {
+    if (!user) {
+        router.push('/login')
+    }else{
+        router.push(`/post/${id}`)
+    }
+}
+
+
   return (
     <Card className="max-w-xl w-full mx-auto">
       <CardBody className="p-4">
         {/* author information */}
+     
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center">
+          <Link className="block mb-2" href={`/profile/${post?.author?._id}`}>
             <div className="relative">
               <Badge
                 isOneChar
                 className={`${!post?.author?.isVerified ? "hidden" : ""}`}
-                color="success"
+               color="primary"
                 content={<CheckIcon />}
                 placement="bottom-right"
                 shape="circle"
@@ -150,12 +180,17 @@ export default function PostCard({ post }: { post: IPost }) {
                 />
               </Badge>
             </div>
+            </Link>
+          
             <div className="ml-3">
-              <p className="font-semibold text-lg">{post?.author?.name}</p>
+            <Link className="block mb-2" href={`/profile/${post?.author?._id}`}>
+              <p className="font-semibold text-lg hover:underline">{post?.author?.name}</p>
+              </Link>
               <p className="text-sm text-default-500">
                 {format(new Date(post?.createdAt), "MMM dd, yyyy")}
               </p>
             </div>
+        
           </div>
 
           {/* follow button */}
@@ -220,12 +255,13 @@ export default function PostCard({ post }: { post: IPost }) {
 
           <EditPostModal isOpen={isOpen} post={post} onClose={onClose} />
         </div>
+    
 
-        <Link className="block mb-2" href={`/post/${post?._id}`}>
+        <div onClick={()=>handlePostDetails(post?._id)} className="block mb-2 hover:cursor-pointer">
           <h1 className="text-2xl font-bold hover:text-blue-600 transition duration-300">
             {post?.title}
           </h1>
-        </Link>
+       
         <p className="text-default-700 dark:text-gray-300 mb-4">
           {post?.description?.substring(0, 100)}...
         </p>
@@ -247,6 +283,7 @@ export default function PostCard({ post }: { post: IPost }) {
               Admin
             </span>
           )}
+        </div>
         </div>
 
         {/* post images */}
@@ -288,28 +325,45 @@ export default function PostCard({ post }: { post: IPost }) {
               <span>{post?.downvote?.length}</span>
             </Button>
           </Tooltip>
-          <Link href={`/post/${post?._id}`}>
+        
+          {/* Comment button with login check */}
+          <Tooltip
+            closeDelay={2000}
+            color="warning"
+            content="Login First"
+            isDisabled={user !== null} // Show tooltip if user is not logged in
+          >
             <Button
               className="text-default-500 hover:text-blue-600"
               size="sm"
               variant="light"
+              onClick={handleCommentClick}
             >
               <MessageCircle className="w-5 h-5" />
-              <span>{post?.commentCount}</span>
+              <span>{post.commentCount}</span>
             </Button>
-          </Link>
+          </Tooltip>
         </div>
+
+       
+        <Tooltip
+            closeDelay={2000}
+            color="warning"
+            content="Login First"
+            isDisabled={user !== null}
+          >
         <Button
           className="text-default-500 hover:text-blue-600"
           size="sm"
           variant="light"
           onClick={() =>
-            handleShare(`http://localhost:3000/post/${post?._id}`)
+            handleShare(`https://travel-trips-client.vercel.app/post/${post?._id}`)
           }
         >
           <Share2 className="w-5 h-5" />
           <span>Share</span>
         </Button>
+        </Tooltip>
       </CardFooter>
     </Card>
   );
